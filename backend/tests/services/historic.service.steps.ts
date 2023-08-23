@@ -3,8 +3,6 @@ import supertest from 'supertest';
 import app from '../../src/app';
 
 import Posts, { getPosts } from '../../src/database/posts';
-import { P } from 'pino';
-import posts from '../../src/database/posts';
 
 const feature = loadFeature('./tests/features/historico_service.feature');
 const request = supertest(app);

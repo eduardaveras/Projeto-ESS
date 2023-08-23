@@ -1,0 +1,16 @@
+<h1 class="title">Histórico de posts</h1>
+<!-- <h2>Histórico de posts usuário {{ userId }}</h2> -->
+<div *ngFor="let review of reviews">
+    <div class="review">
+      <h3>{{ review.title }}</h3>
+      <p>{{ review.game }}</p>
+      <ul>
+        <li *ngFor="let category of review.category">{{ category }}</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div *ngIf="!reviews.length">
+    <p>Nenhum review encontrado para o usuário {{ userId }}.</p>
+  </div>
+  
