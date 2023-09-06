@@ -1,0 +1,23 @@
+<div class="container">
+    <mat-card class="card">
+        <div class="title">Followers ({{ followersCount }})</div>
+        <div *ngFor="let follower of followers">
+            {{ follower.name }} {{ follower.lastName }}
+        </div>
+    </mat-card>
+
+    <mat-card class="card">
+        <div class="title">Following ({{ followingCount }})</div>
+        <div *ngFor="let user of following">
+            {{ user.name }} {{ user.lastName }}
+        </div>
+    </mat-card>
+
+    <!-- Uncomment the button if you want to use it later
+    <app-button
+        (click)="goToHome()"
+        type="btn large black-outline"
+        label="BACK">
+    </app-button>
+    -->
+</div>

@@ -1,15 +1,4 @@
-type Post = {
-    user_id: number;
-    post_id: number;
-    status: string;
-    date: string;
-    category: string[];
-    game: string;
-    rate: number;
-    title: string;
-    description: string;
-    comments: number;
-}
+import { Post } from "../models/post.model";
 
 let posts: Post[] = [
     {
@@ -72,6 +61,18 @@ let posts: Post[] = [
         description: "Usando essa oportunidade para dar as boas vindas à todos os novos membros que chegarem aqui, vamos fazer um espaço massa pra todo mundo compartilhar e discutir nossa opinião em jogos!! Meu jogo favorito é Hollow Knight!!",
         comments: 2
     },
+    {
+        user_id: 1,
+        post_id: 6,
+        status: "active",
+        date: "2023-07-05",
+        category: ["Adventure", "Puzzle"],
+        game: "Unrailed",
+        rate: 5,
+        title: "Piuiiiiii olha o trem passando",
+        description: "Po galera joguei com a amada mt massa",
+        comments: 5
+    }
 ];
 
 export default posts;

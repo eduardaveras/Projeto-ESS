@@ -12,8 +12,7 @@
     "cy:run-e2e": "npx cypress run --e2e",
     "cy:show-coverage": "open ./cypress-coverage/lcov-report/index.html",
     "lint": "npx eslint \"src/**/*.{js,ts,html}\" --quiet --fix",
-    "format": "npx prettier \"src/**/*.{js,ts,html,css,scss}\" --write",
-    "prepare": "husky install"
+    "format": "npx prettier \"src/**/*.{js,ts,html,css,scss}\" --write"
   },
   "private": true,
   "dependencies": {
@@ -59,7 +58,6 @@
     "eslint": "^8.43.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.0",
     "jest": "^29.6.0",
     "jest-preset-angular": "^13.1.1",
     "prettier": "^2.8.8",

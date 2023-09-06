@@ -3,9 +3,9 @@ import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
 import {createUser} from './utils';
-import { v4 as uuidv4 } from 'uuid';
+import * as TestUtils from "../../tests/utils/test_utils";
 
-import { loggedInId } from '../services/list.service';
+import { loggedInId, setAuthenticatedUserID, getAuthenticatedUserID } from '../services/list.service';
 import users from '../database/users';
 import games from '../database/games';
 import lists from '../database/lists';
@@ -14,13 +14,28 @@ import posts from '../database/posts';
 const router = Router();
 const prefix = '/api';
 const fs = require('fs'); //Module to read files
-let loggedID = 0;
-
+let loggedID = 1;
+setAuthenticatedUserID(loggedID);
 
 // -------------------------------- USERS ROUTES --------------------------------
+//*Return Logged USer
+router.get('/me', async (req,res) => {
+  const loggedId_ = getAuthenticatedUserID();
+  console.log(loggedId_)
+  const requestedUser = users.find(user => user.id === loggedId_);
+  console.log(requestedUser)
+
+  if(!requestedUser){
+    return res.status(404).json({ Error : 'User ' + String(loggedId_)  + ' not found' });
+  }
+
+  //PRINT USER PROFILE INFO
+  res.status(200).json(requestedUser);
+});
+
 
 //*Create User
-router.post('/users', (req,res) => {
+router.post('/users', async (req,res) => {
   const { user, email, password, name, lastName, pronouns, bio } = req.body;
   
   //Checking missing info
@@ -47,34 +62,33 @@ router.post('/users', (req,res) => {
     return res.status(400).json({Error : 'Could not find registered logs'});
   }
 
-  let userID = parseInt(uuidv4());
-  while(users.some((users:any) => users.id === userID)){
-    userID = parseInt(uuidv4());
+  let userID = await TestUtils.getRandomInt(1,1000);
+  while(users.find((users:any) => users.id === userID)){
+    userID = await TestUtils.getRandomInt(1,1000);
   }
-  const newUser = createUser(userID, user, email, password, name, lastName, pronouns, bio);
 
+  const newUser = createUser(userID, user, email, password, name, lastName, pronouns, bio);
   try{
-    users.push(newUser);
+    await users.push(newUser);
   }catch (err){
     return res.status(400).json({ Error : 'File could not be written' });
   }
-
   return res.status(201).json({ message: 'User was successfully registered' });
 });
 
 //*Delete User
-router.delete('/users/:id', (req,res) => {
+router.delete('/users/:id', async (req,res) => {
   const id = parseInt(req.params.id);
   loggedID = parseInt(req.query.loggedID as string);
 
-  if(!((loggedID !== 0) || (loggedID !== id))){
+  if(((loggedID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }
 
-  const userIndex = users.findIndex(user => user.id === id);
+  const userIndex = await users.findIndex(user => user.id === id);
 
   if(userIndex !== -1){
-    users.splice(userIndex,1);
+    await users.splice(userIndex,1);
     return res.status(201).json({ message: 'User was successfully deleted' });
   }else{
     return res.status(404).json({ Error : 'User not found' });
@@ -84,9 +98,11 @@ router.delete('/users/:id', (req,res) => {
 //*User Profile
 router.get('/users/:id', (req,res) => {
   const id = parseInt(req.params.id);
-  if(loggedID !== id){
-    return res.status(401).json({ Error : 'Unauthorized' });
-  }
+  loggedID = parseInt(req.query.loggedID as string);
+
+  // if(((loggedID !== 0) && (loggedID !== id))){
+    // return res.status(401).json({ Error : 'Unauthorized' });
+  // }
 
   const requestedUser = users.find(user => user.id === id);
 
@@ -102,13 +118,15 @@ router.get('/users/:id', (req,res) => {
 router.put('/users/:id', (req,res) => {
   const requestBody = req.body;
   const id = parseInt(req.params.id);
+  loggedID = parseInt(req.query.loggedID as string);
+  
 
   const userIndex = users.findIndex((user: any) => user.id === id);
   const requestedUser = users.find(user => user.id === id);
 
   if(!requestedUser){
     return res.status(404).json({ Error : 'User not found' });
-  }else if(loggedID != requestedUser.id){
+  }else if(((loggedID !== 0) && (loggedID !== id))){
     return res.status(401).json({ Error : 'Unauthorized' });
   }else{
     if(users.some((users:any) => users.user === requestBody.user)){
@@ -138,6 +156,11 @@ router.get('/users/:id/followers', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const user = users.find(user => user.id === id);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if (!user) {
     res.status(404).json({ message: 'User not found' });
     return;
@@ -155,6 +178,11 @@ router.get('/users/:id/followers', (req: Request, res: Response) => {
 router.get('/users/:id/following', (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     const user = users.find(user => user.id === id);
+
+    if (isNaN(id)) {
+      res.status(400).json({ message: 'Invalid user ID format' });
+      return;
+    }
 
     if (!user) {
       res.status(404).json({ message: 'User not found' });
@@ -176,6 +204,11 @@ router.post('/users/:id/unfollow', (req: Request, res: Response) => {
 
   const user = users.find(user => user.id === id);
   const unfollowedUser = users.find(user => user.id === unfollowId);
+
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
 
   if(!user?.following.includes(unfollowId)) {
     res.status(400).json({ message: 'You are not following this user' });
@@ -200,6 +233,11 @@ router.post('/users/:id/follow', (req: Request, res: Response) => {
   const user = users.find(user => user.id === id);
   const follower = users.find(user => user.id === followId);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if (user?.following.includes(followId)) {
     res.status(400).json({ message: 'You are already following this user' });
     return;
@@ -222,6 +260,11 @@ router.post('/users/:id/block', (req: Request, res: Response) => {
   const user = users.find(user => user.id === id);
   const blockedUser = users.find(user => user.id === blockId);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if (user?.blocked.includes(blockId)) {
     res.status(400).json({ message: 'You have already blocked this user' });
     return;
@@ -243,6 +286,11 @@ router.post('/users/:id/unblock', (req: Request, res: Response) => {
   const user = users.find(user => user.id === id);
   const unblockedUser = users.find(user => user.id === unblockId);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if(!user?.blocked.includes(unblockId)) {
     res.status(400).json({ message: 'You have not blocked this user' });
     return;
@@ -262,6 +310,11 @@ router.get('/users/:id/blocked/count', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const user = users.find(user => user.id === id);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if (!user) {
     res.status(404).json({ message: 'User not found' });
     return;
@@ -277,6 +330,11 @@ router.get('/users/:id/followers/count', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const user = users.find(user => user.id === id);
 
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
+
   if (!user) {
     res.status(404).json({ message: 'User not found' });
     return;
@@ -291,6 +349,11 @@ router.get('/users/:id/followers/count', (req: Request, res: Response) => {
 router.get('/users/:id/following/count', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const user = users.find(user => user.id === id);
+
+  if (isNaN(id)) {
+    res.status(400).json({ message: 'Invalid user ID format' });
+    return;
+  }
 
   if(!user) {
     res.status(404).json({ message: 'User not found' });
@@ -311,6 +374,7 @@ import { ListEntry, EntryType, GameList } from '../models/list.model';
 import { User } from '../models/user.model';
 import { Game } from '../models/game.model';
 import * as utils from '../services/list.service'
+import { get, request } from 'http';
 
 function setUsers(newUsers : User[]){
   users.length = 0;
@@ -590,7 +654,13 @@ router.get('/users/:id_user/historic/category/:category', (req: Request, res: Re
 
   //check category
   const category = req.params.category;
-  const review = posts.filter((post) => post.category.includes(category) && post.user_id === user.id);
+  let review = posts.filter((post) => post.category.includes(category) && post.user_id === user.id);
+
+  if (req.query.desc) 
+  review.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  else 
+  review.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   if (review.length === 0) 
     return res.status(404).json({ error: 'Category not found' });
 

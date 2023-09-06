@@ -7,9 +7,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './home/home.module';
+import { HistoricListComponent } from './historic-list/historic-list.component';
+import { FollowersComponent } from './followers/followers.component';
+import { ProfileModule } from './profile/profile.module';
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [AppComponent, HistoricListComponent],
     imports: [
         BrowserModule,
         HttpClientModule,
@@ -17,6 +20,7 @@ import { HomeModule } from './home/home.module';
         HomeModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+        ProfileModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

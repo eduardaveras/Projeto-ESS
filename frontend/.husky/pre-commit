@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-npm run prepare
-# npm run prepare && npm test && npm cy:e2e-headless

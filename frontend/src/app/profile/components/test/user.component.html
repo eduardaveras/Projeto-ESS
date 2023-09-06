@@ -1,0 +1,50 @@
+<div class="profile-page">
+    <!-- Plano de fundo -->
+    <div class="background"></div>
+
+    <div class="profile-background"></div>
+    <!-- Retângulo vertical para informações do perfil -->
+    <div class="profile-content">
+        <!-- Informações do perfil -->
+
+        <div class="profile-left">
+            <div class="profile-info">
+                <!-- Foto do perfil -->
+                <img
+                    src="https://www.w3schools.com/howto/img_avatar.png"
+                    alt="Foto do perfil"
+                    class="profile-picture" />
+                <div class="user-info">
+                    <h1 class="username">{{user.name}}</h1>
+                    <div class="follow-section">
+                        <div class="followapp">
+                            <app-followers 
+                                [userId]="userId" 
+                                (followersCountUpdated)="updateFollowersCount($event)"
+                                (followingCountUpdated)="updateFollowingCount($event)"
+                                (blockedCountUpdated)="updateBlockedCount($event)">
+                            </app-followers>
+                        </div>
+                        <app-follow-btn class="follow-btn"></app-follow-btn>
+                        <div class="follows">
+                            <span class="follow-counter" (click)="followersButton()">{{followersCount}} Seguidores</span>
+                            <span class="follow-counter" (click)="followersButton()">{{followingCount}} Seguindo</span>
+                        </div>
+                    </div>
+                    <p class="user-bio">{{user.bio}}</p>
+                </div>
+            </div>
+            <div class="misc-info"></div>
+        </div>
+
+    <div class="profile-right">
+      <app-edit-btn class="editbtn"></app-edit-btn> <!--Click ele tem que trazer um componente de edição-->
+      <app-button (click)="goToRoute('/gamesList')" label="Lista de jogos" type="btn medium colorpurple"></app-button> 
+      <app-button (click)="goToHistoric()" label="Histórico" type="btn medium colorpurple"></app-button> 
+      <app-post-btn class="postbtn" (click)="goToRoute('/post')"></app-post-btn>
+    </div>
+
+        <!-- Outras informações, como jogos favoritos, conquistas, etc. -->
+        <!-- Você pode adicionar mais elementos aqui -->
+    </div>
+</div>
