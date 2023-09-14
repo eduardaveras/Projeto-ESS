@@ -71,13 +71,12 @@
 
       <app-edit-btn class="editbtn" (click)="editButton()" *ngIf="isUserLoggedIn" [goToEdit]="!goToEdit"></app-edit-btn>
       <app-button class="editbtn" (click)="goToLoggedProfile()" *ngIf="!isUserLoggedIn" label="Meu Perfil" type="btn medium colorred"></app-button> 
-
       <app-button (click)="goToRoute('/list')" label="Lista de jogos" type="btn medium colorred"></app-button> 
       <app-button (click)="goToRoute('/history')" label="Histórico" type="btn medium colorred"></app-button>
       <app-button (click)="goToHome()" label="Home" type="btn medium colorred"></app-button>
 
       <app-button class="postbtn" (click)="deleteAccount()" label="Excluir conta" type="btn small deletebtn" *ngIf="!goToEdit"></app-button> 
-      <!-- <app-post-btn class="postbtn" (click)="goToRoute('/post')" *ngIf="goToEdit"></app-post-btn> -->
+      <app-post-btn class="postbtn" (click)="postButton()" *ngIf="isUserLoggedIn && goToEdit" [goToPost]="!goToPost"></app-post-btn>
     </div>
 
         <!-- Outras informações, como jogos favoritos, conquistas, etc. -->

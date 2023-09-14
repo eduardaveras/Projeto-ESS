@@ -13,12 +13,17 @@
         <button class="categories" *ngFor="let category of availableCategories" (click)="getHistoryByCategory(category)" [class.active]="selectedCategory === category">{{category}}</button>
         <button class="all" [class.active]="selectedCategory === 'all'" (click)="showAll()">All</button>
     </div>
-    <div *ngFor="let post of show_posts" class="post" (click)="goToPost()">
+    <div *ngFor="let post of show_posts" class="post" (click)="openPost(post.user_id, post.post_id)">
         <h1><strong>{{post.title}}</strong></h1>
         <p style="font-size: 18px;" class="game"><strong>Jogo:</strong> {{post.game}}</p>
-        <p style="font-size: 18px;" class="categories"><strong>Categorias:</strong> {{ post.category.join(', ') }}</p>
-        <p style="font-size: 18px;" class="rate"><strong>Nota:</strong> {{ post.rate }}</p>
-        <p style="font-size: 18px;" class="date"><strong>Data:</strong> {{ post.date }}</p>
+        <p style="font-size: 18px;" class="categories"><strong>Categorias:</strong> {{ post.category }}</p>
+        <div class="star-rating">
+          <span
+          class="star" *ngFor="let _ of [1, 2, 3, 4, 5]; let i = index" [ngClass]="starClass(i, post.rate)">
+          &#9733;
+          </span>
+        </div>
+        <p style="font-size: 18px;" class="date"><strong>Data:</strong> {{ post.date | date: 'dd/MMM'  }}</p>
     </div>
 </div>
 

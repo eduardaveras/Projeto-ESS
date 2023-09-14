@@ -1,19 +1,18 @@
-<div>
-  <div class="feed-container">
-    <div class="tabs" *ngIf="isUserLoggedIn">
-      <button (click)="setActiveTab('following')" [class.active]="activeTab === 'following'">Seguindo</button>
-      <button (click)="setActiveTab('myFeed')" [class.active]="activeTab === 'myFeed'">Meu Feed</button>
-    </div>
+<div class="feed-container">
+  <div class="tabs" *ngIf="isUserLoggedIn">
+    <button (click)="setActiveTab('following')" [class.active]="activeTab === 'following'">Seguindo</button>
+    <button (click)="setActiveTab('myFeed')" [class.active]="activeTab === 'myFeed'">Meu Feed</button>
+  </div>
 
-    <div *ngFor="let item of feedItems" class="post">
-      <div class="author-info">
-        <img [src]="_getProfileImage(item.authorId)" alt="Foto de perfil de {{ item.authorName }}" class="profile-picture">
-        <a class="author" (click)="openProfile(item.authorId)"><strong class="username">@{{item.authorUsername}}</strong> {{ item.authorName }}</a>
-      </div>
-      <h2>Novo post!</h2>
-      <p>{{ item.content }}</p>
-      <a class="see-more" (click)="openPost(item.authorId)">Ver mais</a>
-      <p class="date">{{ item.date }}</p>
+  <div *ngFor="let item of feedItems" class="post">
+    <div class="author-info">
+      <img [src]="_getProfileImage(item.authorId)" alt="Foto de perfil de {{ item.authorName }}" class="profile-picture">
+      <a class="author" (click)="openProfile(item.authorId)">
+        <strong class="username">@{{item.authorUsername}}</strong>
+      </a>
     </div>
+    <p class="game">Game: {{ item.game }}</p>
+    <p class="rate">Nota: {{ item.rate }}/5</p>
+    <p class="date">{{ item.date | date: 'dd/MMM' }}</p>
   </div>
 </div>

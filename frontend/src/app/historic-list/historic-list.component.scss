@@ -74,4 +74,19 @@
       font-size: 18px;
       margin-bottom: 10px;
     }
+
+    .star-rating {
+      font-size: 24px; /* Adjust the font size as needed */
+      display: inline-block;
+    }
+    
+    .star {
+      color: #fff; /* Default star color (black) */
+      cursor: pointer;
+      transition: color 0.3s ease; /* Smooth color transition on hover */
+    }
+    
+    .star.yellow {
+      color: #FFD700; /* Yellow star color for selected stars */
+    }
 }

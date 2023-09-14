@@ -16,6 +16,7 @@ import imageUtils from "../../assets/getImages.service";
 
 export class FeedComponent implements OnInit{
     @Input() userId : number = 1;
+    @Input() postId : number = 1;
     @Output() feedItems : FeedItem[] = [];
     myFeed : FeedItem[] = [];
     feedFollowing : FeedItem[] = [];
@@ -28,7 +29,8 @@ export class FeedComponent implements OnInit{
     ngOnInit(): void {
 
       this.userId = Number(this.route.snapshot.paramMap.get('id'));
-
+      this.postId = Number(this.route.snapshot.paramMap.get('post_id'));
+      
       this.checkIsUserLoggedIn();
       this.getMyFeed();
     }
@@ -65,9 +67,12 @@ export class FeedComponent implements OnInit{
               this.getUserDetails(post.user_id).pipe(
                 map(user => ({
                   authorId: post.user_id,
+                  postId: post.post_id,
+                  game: post.game,
                   authorUsername: user.user,
                   authorName: user.name + ' ' + user.lastName,
                   content: post.title,
+                  rate: post.rate,
                   date: post.date,
                   type: 'post'
                 }))
@@ -103,8 +108,22 @@ export class FeedComponent implements OnInit{
         });
     }
 
-    openPost(userId: number) : void {
-      this.router.navigate([`/users/${userId}/history`]);
+    starClass(index: number, rating: number): string {
+      if (index < rating) {
+        return 'yellow';
+      } else {
+        return 'white';
+      }
+    }
+  
+    getStarRange(rating: number): number[] {
+      return Array.from({ length: rating }, (_, i) => i + 1);
+    }
+  
+
+    openPost(userId: number, postId: number) : void {
+      this.router.navigate([`/users/${userId}/${postId}`]);
+
     }
 
     checkIsUserLoggedIn() {

@@ -1,0 +1,5 @@
+<span class="star" *ngFor="let _ of [1, 2, 3, 4, 5]; let i = index"
+      [ngClass]="starClass(i)"
+      (click)="setRating(i)">
+  &#9733;
+</span>

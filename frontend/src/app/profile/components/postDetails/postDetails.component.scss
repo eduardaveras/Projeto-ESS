@@ -1,0 +1,51 @@
+.detailed-post-container {
+  max-width: 800px;
+  margin: 20px;
+  padding: 20px;
+  background-color: #363636;
+
+  .post-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+  .post-info {
+    font-size: 16px;
+    color: #888;
+    margin: 0;
+    margin-bottom: 5px;
+
+    strong {
+      font-weight: bold;
+    }
+  }
+
+  .post-content {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 20px;
+
+    p {
+      margin: 0;
+      margin-bottom: 15px;
+    }
+  }
+
+  .star-rating {
+    font-size: 24px;
+    display: inline-block;
+  }
+  
+  .star {
+    color: #fff; /* Default star color (black) */
+    cursor: pointer;
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+  }
+  
+  .star.yellow {
+    color: #FFD700; /* Yellow star color for selected stars */
+  }
+  
+}

@@ -24,6 +24,7 @@ export class UserComponent implements OnInit {
   followPopUp: boolean = false;
   activeTab: string = 'followers';
   goToEdit: boolean = true;
+  goToPost: boolean = true;
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -50,6 +51,7 @@ export class UserComponent implements OnInit {
     this.route.url.subscribe(urlSegments => {
       const currentUrl = this.router.url;
       this.goToEdit = !currentUrl.includes('edit');
+      this.goToPost = !currentUrl.includes('post');
     });
   }
 
@@ -173,6 +175,16 @@ export class UserComponent implements OnInit {
     }else if(!this.goToEdit){
       this.router.navigate([`/users/${this.userId}`]);
       this.goToEdit = true;
+    }
+  }
+
+  postButton(): void {
+    if (this.goToPost) {
+      this.router.navigate([`/users/${this.userId}/post`]);
+      this.goToPost = false;
+    }else if(!this.goToPost){
+      this.router.navigate([`/users/${this.userId}/post`]);
+      this.goToPost = true;
     }
   }
 
