@@ -1,0 +1,14 @@
+.star-rating {
+  font-size: 24px; /* Adjust the font size as needed */
+  display: inline-block;
+}
+
+.star {
+  color: #000; /* Default star color */
+  cursor: pointer;
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.star.yellow {
+  color: #FFD700; /* Yellow star color for selected stars */
+}

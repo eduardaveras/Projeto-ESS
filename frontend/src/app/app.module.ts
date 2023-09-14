@@ -11,16 +11,16 @@ import { HistoricListComponent } from './historic-list/historic-list.component';
 import { FollowersComponent } from './followers/followers.component';
 import { ProfileModule } from './profile/profile.module';
 import { FeedComponent } from './feed/feed.component';
-
+import { CommonModule } from '@angular/common';
 import { HomeModule } from './home/home.module';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { SignupComponent } from './signup/signup.component';
 import { GameListComponent } from './game-list/game-list.component';
-
+import { SignupComponent } from './signup/signup.component';import { DatePipe } from '@angular/common';
 
 @NgModule({
     declarations: [AppComponent, HistoricListComponent, NotFoundComponent, SignupComponent],
     imports: [
+        CommonModule,
         FormsModule,
         BrowserModule,
         HttpClientModule,
@@ -30,7 +30,7 @@ import { GameListComponent } from './game-list/game-list.component';
         BrowserAnimationsModule,
         ProfileModule,
     ],
-    providers: [],
+    providers: [DatePipe],
     bootstrap: [AppComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
