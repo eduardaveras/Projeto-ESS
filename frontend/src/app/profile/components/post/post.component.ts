@@ -5,7 +5,6 @@ import { Post } from '../../../../../../backend/src/models/post.model';
 import { User } from '../../../../../../backend/src/models/user.model';
 import { StarRatingComponent } from 'src/app/shared/components/star-rating/star-rating.component';
 import { catchError } from 'rxjs/operators';
-import { toast } from 'react-toastify';
 import { DatePipe } from '@angular/common';
 
 @Component({
